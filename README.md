@@ -39,3 +39,7 @@ Unfortuneatly, not with my implementations, MSE's even from sophisticated models
 For a sensor error of size 6, the Mean Squared Errors are as follows:
 
 ![mses](/img/error_bars_6.png)
+
+### Future Direction
+* It  would be interesting see see how much data you could throw at this pipeline and how much this would effect the Error.
+* There may be further investigation required into current ML literature to find a specific interpolate-like architecture.

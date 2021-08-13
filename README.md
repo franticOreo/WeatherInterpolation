@@ -30,11 +30,11 @@ What about if the sensor was down for 6 hours. Then what would a conventional me
 
 ![spline6](/img/spline_gap_size_6.png)
 
-**Can a DL model beat this?**
+**Can a ML model beat this?**
 
 Unfortuneatly, not with my implementations, MSE's even from sophisticated models employing Gated Recurrent Units, and 1D Convolutional layers were unable to beat the best performing conventional methods. As mentioned previously, this I believe is mainly due to the fact the model comparison between conventional methods and Machine Learning methods is realtively incomparable as the conventional method is able to seek forward an arbitrary amount of values and fit a curve, a ML method is predictly relatively blindly! Hence, curves being fit like so:
 
-![conv_model](/img/tf_conv_gap_size_6.png)
+![conv_model](/img/tf_linear_gap_size_6.png)
 
 For a sensor error of size 6, the Mean Squared Errors are as follows:
 

@@ -11,7 +11,7 @@ This dataset was chosen due to it's hourly resolution, this was the closest reso
 **Artificial Sensor Error Creation**<br>
 As this problem is concerned with different interpolation techniques performances, it was then essential to create an artificially noisy dataset to simulate sensor error. We, are then able to validate our results between the artificial *gap* dataset and the *complete* dataset(original dataset). 
 
-In order to distribute noise throughout the dataset, I have created two methods to generate artificial gaps in a series both; `variable_gap_df` and `fixed_gap_df`. `variable_gap_df` is arguably a more realistic simulation of sensor error wheras `fixed_gap_df` is more effective for experimenting as the gap size is fixed.
+In order to distribute noise throughout the dataset, I have created two methods to generate artificial gaps in a series both; `create_variable_gap_df` and `create_fixed_gap_df`. `create_variable_gap_df` is arguably a more realistic simulation of sensor error wheras `create_fixed_gap_df` is more effective for experimenting as the gap size is fixed.
 
 For `variable_gap_df`, a sine transformation is applied to the *complete* data, the sinusoisal distrubution is then fed into ```np.choice```. The intention of this distribution was to simulate error occuring in groups opposed to a uniform distribution which would create random *salt and pepper-like* gaps. Below you can see a random subset of the data plotted with artificial gaps agaisnt the complete data, note the red *Missing* points are often neighbouring.
 
@@ -25,19 +25,17 @@ Depending on the random state of Numpy, ```'akima'``` and ```quadratic``` often 
 Unsurprisingly, ML/DL methods will struggle to outperform with these conventional methods due to the nature of the `interpolate` method (or interpolation in general), it notices a `NaN`\s grabs a point A prior to the `Nan` and the next non `NaN` value, B. Then a function is then applied, a line/curve is fitted and the series is filled between A and B. I am unaware of any ML/DL methods that operate under this way, traditionally ML/DL models take in historical data and predict into the future, however there is no consideration of B. Regardless, these experiments have been conducted and can be viewed in `WeatherInterpolation.ipynb`.
 
 #### Hmm... 
-What about if the sensor was down for a considerable amount of time, say the temperature sensor was down for 150 hours. Then what would a conventional method do? I'm looking at you spline interpolation (method with the lowest MSE {0.1271} with 150 hour gaps). However, lets look what our spline did ...
+What about if the sensor was down for 6 hours. Then what would a conventional method do? 
 
-![spline150](/img/spline150.png)
 
-**Now bring out the big guns*
+![spline6](/img/spline_gap_size_6.png)
 
-Well perhaps not too big. A simple `tf.layers.Dense` layer with one neuron, basically a Linear Regression creates a beutiful attempt at replicating the complete data as seen below:
+**Can a DL model beat this?**
 
-![interp2_linear](/img/interp2_linear.png)
+Unfortuneatly, not with my implementations, MSE's even from sophisticated models employing Gated Recurrent Units, and 1D Convolutional layers were unable to beat the best performing conventional methods. As mentioned previously, this I believe is mainly due to the fact the model comparison between conventional methods and Machine Learning methods is realtively incomparable as the conventional method is able to seek forward an arbitrary amount of values and fit a curve, a ML method is predictly relatively blindly! Hence, curves being fit like so:
 
-This Tensorflow Linear model has an MSE of: 0.0237
+![conv_model](/img/tf_conv_gap_size_6.png)
 
-Further, more sophisticated models employing Convolutional layers can even bring down MSE even lower to 0.0143.
+For a sensor error of size 6, the Mean Squared Errors are as follows:
 
-![interp_conv](/img/interp_conv.png)
-
+![mses](/img/error_bars_6.png)
